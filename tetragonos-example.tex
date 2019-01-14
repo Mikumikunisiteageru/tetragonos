@@ -1,0 +1,61 @@
+% arara: xelatex
+% arara: makeglossaries
+% arara: xelatex
+% arara: xelatex
+
+% tetragonos-example.tex
+% 20190114
+% Yuchang Yang < yang.yc.allium@gmail.com >
+
+\documentclass[a5paper]{ctexart}
+\usepackage[margin=25mm]{geometry}
+\usepackage{multicol}
+\usepackage{tetragonos}
+\usepackage[nopostdot,nomain]{glossaries}
+\newglossary*{TG}{Tegragonos}
+\makeglossaries
+\def\syntaxTG#1#2#3#4#5{\textbf{#1#2#3#4\textsubscript{#5}}}
+\newcommand{\addTG}[1]{%
+	\newglossaryentry{#1}{
+		type=TG, 
+		name={\syntaxTG#1}, 
+		description={\nopostdesc}
+	}%
+}
+\newcommand{\anchorTG}[1]{%
+	\edef\theTG{\getTG{#1}}%
+	\expandafter\addTG\expandafter{\theTG\expandafter}%
+	\newglossaryentry{#1}{
+		type=TG, 
+		name={\textmd{#1}}, 
+		parent={\theTG}, 
+		sort={\theTG}, 
+		description={\hfill}
+	}%
+	\glsadd{#1}%
+}
+\newcommand{\cc}[1]{#1\anchorTG{#1}}
+
+\title{廣東新語·木語·諸山果\footnote{\texttt{https://ctext.org/library.pl?if=en\&file=24116\&page=115}}}
+\author{屈大均}
+\date{康熙二十六年}
+
+\begin{document}
+
+\maketitle
+	
+廣中山果，曰\cc{穀子}者，大如\cc{橄欖}而長，初亦苦澀，後甘，嫩者蜜漬之可食。曰\cc{餘甘子}，樹高丈餘，葉如\cc{槐}，子如\cc{川楝}，白色，有文理，核作六稜，亦初苦澀後甘，行者以之生津，一名\cc{菴摩勒}。曰\cc{鬼目子}，大如\cc{梅}、\cc{李}，皮黃肉紅，味甚酸，人以爲蔬，以皮上有目，名\cc{鬼目}，一曰\cc{麂木}，麂者，鬼之譌也。曰\cc{山棗子}，葉似\cc{梅}，子如\cc{荔支}，九月熟。曰\cc{卍果}，果作卍字形，畫甚方正，蔕在字中不可見，生食香甘，一名\cc{蓬鬆子}。曰\cc{桾櫏子}，樹似\cc{甘蕉}，子如\cc{馬乳}而小，俗稱\cc{牛奶柹}，亦曰\cc{牛乳子}，廣人言乳曰奶，中有美漿若牛乳，故曰\cc{牛奶子}，一名\cc{㮕棗}。曰\cc{五子}，其狀如\cc{梨}，有五核。曰\cc{千歲子}，蔓生，子在根下，有綠鬚交加如織，一苞恒二百餘子，皮青黃，乾者殼肉相離，撼之有聲，似\cc{肉荳蔻}。曰\cc{秋風子}，色褐，如梨而小，味酸澀，熟乃可食。曰\cc{金紐子}，色紅黃，味甘，大如\cc{秋風子}。俗歌云：「一雙\cc{金紐子}，無計上羅衫。」曰\cc{青竹子}，如\cc{桃}而圓，味酸，色黃。曰\cc{羊齒子}，一曰\cc{羊矢}，如\cc{石蓮}而小，色青味甘。曰\cc{不納子}，實如圓\cc{棗}，十月黃熟，味甜酸，蓋\cc{蘋果}之小者，粵中少\cc{蘋果}、\cc{花紅}二種，以\cc{不納子}代之。曰\cc{山葡萄}，一名\cc{蘡薁}，其莖細裊，花紫白，實比\cc{葡萄}而小，色赤，味酢，可爲酒，八九月熟。曰\cc{山韶子}，類\cc{荔支}而鮮麗過之，微有小毫，一名\cc{毛荔支}，亦曰\cc{毛珧子}，肉薄而酸澀，著核不離，蓋\cc{荔支}之變者。曰\cc{臙脂子}，子赤如臙脂，味甜酸，諺曰：「不采\cc{紅蓼}花，但采\cc{臙脂子}。持以作朱顏，其餘入玉齒。」曰\cc{都捻子}，樸樕叢生，花如\cc{芍藥}而小，春時開，有紅白二種，子如\cc{軟柿}，外紫內赤，亦小，有四葉承之，每食必倒捻其蔕，故一名\cc{倒捻子}，子汁可染若臙脂，花可爲酒，葉可麯，皮漬之得膠以代\cc{柿}，蘇子瞻名曰\cc{海漆}，非\cc{漆}而名爲\cc{漆}，以其得乙木之液，凝而爲血，而可補人之血，與\cc{漆}同功，功逾\cc{青黏}，故名，取子研濾爲膏，餌之又止腸滑，以其爲用甚眾，食治皆需，故又名\cc{都捻}，產羅浮者高丈許，子尤美。曰\cc{黃皮果}，狀如金彈，六月熟，其漿酸甘似\cc{葡萄}，可消食順氣除暑熱，與\cc{荔支}並進，\cc{荔支}饜飫，以\cc{黃皮}解之，諺曰：「饑食\cc{荔支}，飽食\cc{黃皮}。」有曰\cc{白蠟子}者，與相似，其味尤勝，諺曰：「\cc{黃皮}\cc{白蠟}，甜酸相雜。」曰\cc{蘋婆果}，一名\cc{林檎}，樹極高，葉大而光潤，莢如\cc{皂角}而大，長二三寸，子生莢兩旁，或四或六，子老則莢迸開，內深紅，包子皮黑，肉黃，熟食味甘，蓋\cc{耎栗}也，相傳三藏法師從西域攜至，與\cc{訶梨勒}、\cc{菩提}雜植虞飜苑中，今遍粵中有之，梵語曰\cc{蘋婆}，以其葉盛成叢，又曰\cc{叢林}。一種\cc{水樃子}，與相似，多生水間。或謂\cc{林檎}爲雄，\cc{水樃}爲雌，粵歌云：「\cc{水樃}\cc{林檎}大小同，盤中不辩是雌雄。」
+
+\section*{四角号码检索表}
+
+\setlength{\columnsep}{16pt}
+\setlength{\columnseprule}{0.4pt}
+\begin{multicols}{4}
+	\renewcommand{\glossarysection}[2][]{}
+	\renewcommand*{\glsgroupskip}{}
+	\setlength{\glstreeindent}{7pt}
+	\printglossary[type=TG,style=tree,title=]
+\end{multicols}
+
+	
+\end{document}

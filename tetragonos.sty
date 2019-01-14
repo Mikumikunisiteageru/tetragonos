@@ -1,0 +1,14 @@
+%% tetragonos.sty
+%% 20190114
+%% Author: Yuchang Yang
+%%  Email: yang.yc.allium@gmail.com
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{tetragonos}[2019/01/14 package tetragonos]
+\newcommand{\saveTG}[2]{\expandafter\gdef\csname TG-#1\endcsname{#2}}
+\newcommand{\loadTG}[1]{\csname TG-#1\endcsname}
+\makeatletter
+\newcommand{\get@first@char}[1]{\loadTG{#1}\iffalse}
+\newcommand{\getTG}[1]{\get@first@char#1\fi}
+\makeatother
+\input{tetragonos-database.tex}
+%% End of file `tetrogonos.sty'
