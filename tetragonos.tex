@@ -1,0 +1,163 @@
+\documentclass[a4paper]{ctexart}
+% 20190115
+% Author: Yuchang Yang < yang.yc.allium@gmail.com >
+\usepackage{metalogo}
+\usepackage{fancyvrb}
+\usepackage{changepage}
+\usepackage{color}
+\definecolor{darkmiku}{RGB}{19, 149, 139}
+\CTEXsetup[format={\Large\bfseries}]{section}
+
+\title{tetragonos宏包\footnote{Github 地址：\texttt{https://github.com/Mikumikunisiteageru/tetragonos}}}
+\author{杨宇昌\footnote{电子邮箱：\texttt{yang.yc.allium@gmail.com}}}
+\date{2019年1月16日\qquad v1}
+
+\begin{document}
+
+\maketitle
+
+\begingroup
+	\CJKfontspec{IPAPMincho}
+	\large
+	\centerline{四角い地球を丸くしてる！}
+	\hfill --- 初音ミク、\kern1ex TOKOTOKO（西沢さん\mbox{P}）\hbox{}\par
+	\vskip1em
+\endgroup
+
+\section{简介}
+tetragonos 是一个用于查询汉字四角号码的\XeLaTeX{}宏包。\par
+宏包名称取自希腊语，tetra者四也，gon者角也。\par
+	
+\section{用法}
+tetragonos 宏包定义了宏 \verb|\getTG|。\texttt{\textbackslash getTG\{\textit{<string>}\}} 可展开成汉字字符串 \texttt{\textit{<string>}} 中第一个汉字的带附号的新版四角号码。举个简单的例子，\verb|\getTG{汉}| 与 \verb|\getTG{汉字}| 都会展开成“汉”字的四角号码，即 37140。\par
+	
+\section{四角索引范例}
+四角号码常用来为汉字字词编写索引。文件 tetragonos-example.tex 中即示范了 tetragonos 宏包与 glossaries 宏包的联合应用。该文件从《广东新语》中摘录了一段文字，并为其中出现的所有植物名称建立了首字四角号码索引。该文件中的关键内容如下：
+	
+\begingroup
+	\begin{adjustwidth}{3em}{3em}
+	\footnotesize
+	\begin{Verbatim}[numbers=left,numbersep=1ex,gobble=2,firstnumber=1,formatcom=\color{darkmiku}]
+		% arara: clean: {files: [tetragonos-example.glsdefs, tetragonos-example.TG-*]}
+		% arara: xelatex
+		% arara: makeglossaries
+		% arara: xelatex
+		% arara: xelatex
+	\end{Verbatim}
+	指示 arara 运行时先清空历史索引条目，之后依次执行 \XeLaTeX{}、makeglossaries 等各程序。编译时直接输入 \verb|arara tetragonos-example| 即可。
+	\begin{Verbatim}[numbers=left,numbersep=1ex,gobble=2,firstnumber=28,formatcom=\color{darkmiku}]
+		\usepackage{tetragonos}
+		\usepackage[nopostdot,nomain]{glossaries}
+		\newglossary*{TG}{Tegragonos}
+		\makeglossaries
+	\end{Verbatim}
+	引入 tetragonos 与 glossaries 宏包后，新建好索引，准备登记四角号码与汉字条目。
+	\begin{Verbatim}[numbers=left,numbersep=1ex,gobble=2,firstnumber=32,formatcom=\color{darkmiku}]
+		\def\syntaxTG#1#2#3#4#5{\textbf{#1#2#3#4\textsubscript{#5}}}
+	\end{Verbatim}
+	定义四角号码的格式，使其整体加粗，并令附号（即附角号码）作下标。
+	\begin{Verbatim}[numbers=left,numbersep=1ex,gobble=2,firstnumber=33,tabsize=4,formatcom=\color{darkmiku}]
+		\newcommand{\addTG}[1]{%
+			\newglossaryentry{#1}{
+				type=TG, 
+				name={\syntaxTG#1}, 
+				description={\nopostdesc}
+			}%
+		}
+	\end{Verbatim}
+	定义宏 \verb|\addTG|，建立四角号码条目，在索引中位于第一级。
+	\begin{Verbatim}[numbers=left,numbersep=1ex,gobble=2,firstnumber=40,tabsize=4,formatcom=\color{darkmiku}]
+		\newcommand{\anchorTG}[1]{%
+			\edef\theTG{\getTG{#1}}%
+			\expandafter\addTG\expandafter{\theTG\expandafter}%
+			\newglossaryentry{#1}{
+				type=TG, 
+				name={\textmd{#1}}, 
+				parent={\theTG}, 
+				sort={\theTG}, 
+				description={\hfill}
+			}%
+			\glsadd{#1}%
+		}
+	\end{Verbatim}
+	定义宏 \verb|\anchorTG|，建立汉字（词）条目，居于第二级，是其首字四角号码对应的条目的子条目。\verb|\anchorTG| 只插入锚点，登记汉字（词）条目与当前页码，不在正文中产生可视效应。这是照顾一些在正文与索引中有不同字（词）形的条目的需要，毕竟在 \TeX{} 里合总比分容易。glossaries 宏包中的 \verb|\newglossaryentry| 命令会自动忽略登记过的条目，因此不必特意对条目判重。\verb|\expandafter| 强迫 \verb|\theTG| 在送入 \verb|\addTG| 前完全展平成四角号码。
+	\begin{Verbatim}[numbers=left,numbersep=1ex,gobble=2,firstnumber=52,formatcom=\color{darkmiku}]
+		\newcommand{\cc}[1]{#1\anchorTG{#1}}
+	\end{Verbatim}
+	\verb|\cc| 则定义为显示完汉字（词）后马上把它原样加入索引的命令。
+	\begin{Verbatim}[numbers=left,numbersep=1ex,gobble=2,firstnumber=68,tabsize=4,formatcom=\color{darkmiku}]
+		\begin{multicols}{4}
+			\renewcommand{\glossarysection}[2][]{}
+			\renewcommand*{\glsgroupskip}{}
+			\setlength{\glstreeindent}{7pt}
+			\printglossary[type=TG,style=tree,title=]
+		\end{multicols}
+	\end{Verbatim}
+	四角号码索引分成多个纵栏，采用 tree 样式，第一级的四角号码均无缩进，第二级的汉字（词）排于各自所属的四角号码之后，统一缩进值可根据需要自由调整。
+	\end{adjustwidth}
+\endgroup
+
+\section{代码实现}
+
+宏包主文件 tetragonos.sty 的全部内容如下：
+
+\begingroup
+	\begin{adjustwidth}{3em}{3em}
+	\footnotesize
+	\begin{Verbatim}[numbers=left,numbersep=1ex,gobble=2,formatcom=\color{darkmiku}]
+		%% tetragonos.sty
+		%% Copyright 2019 Yuchang Yang < yang.yc.allium@gmail.com >
+		%
+		% This work may be distributed and/or modified under the
+		% conditions of the LaTeX Project Public License, either version 1.3
+		% of this license or (at your option) any later version.
+		% The latest version of this license is in
+		%   http://www.latex-project.org/lppl.txt
+		% and version 1.3 or later is part of all distributions of LaTeX
+		% version 2005/12/01 or later.
+		%
+		% This work has the LPPL maintenance status `maintained'.
+		% 
+		% The Current Maintainer of this work is Yuchang Yang.
+		%
+		% This work consists of the files tetragonos.sty and tetragonos-database.def
+		% and the associated example file tetragonos-example.tex.
+		%%
+		\NeedsTeXFormat{LaTeX2e}
+		\ProvidesPackage{tetragonos}[2019/01/15 v1 package tetragonos]
+		\newcommand{\saveTG}[2]{\expandafter\gdef\csname TG-#1\endcsname{#2}}
+		\newcommand{\loadTG}[1]{\csname TG-#1\endcsname}
+	\end{Verbatim}
+	宏 \verb|\saveTG| 与 \verb|\loadTG| 实际上实现了一个索引为汉字字符的数组的写入与读出。
+	\begin{Verbatim}[numbers=left,numbersep=1ex,gobble=2,firstnumber=last,formatcom=\color{darkmiku}]
+		\makeatletter
+		\newcommand{\get@first@char}[1]{\loadTG{#1}\iffalse}
+		\newcommand{\getTG}[1]{\get@first@char#1\fi}
+		\makeatother
+	\end{Verbatim}
+	宏 \verb|\getTG| 利用 \TeX{} 的宏机制配合 \verb|\get@first@char|，实现了抓取参数中的第一个字符并查询其四角号码的功能。
+	\begin{Verbatim}[numbers=left,numbersep=1ex,gobble=2,firstnumber=last,formatcom=\color{darkmiku}]
+		\input{tetragonos-database.tex}
+		%%
+		%% End of file `tetrogonos.sty'
+	\end{Verbatim}
+	\end{adjustwidth}
+\endgroup
+
+汉字到四角号码的映射储存在另外的文件 tetragonos-example.def 中。其正文开头数行如下：
+
+\begingroup
+	\begin{adjustwidth}{3em}{3em}
+	\footnotesize
+	\begin{Verbatim}[numbers=left,numbersep=1ex,gobble=2,formatcom=\color{darkmiku},firstnumber=22]
+		\ProvidesFile{tetragonos-database.def}[2019/01/14 v1 tetragonos database]
+		\saveTG{亠}{00000}
+		\saveTG{弯}{00027}
+		\saveTG{亪}{00037}
+		\saveTG{疒}{00100}
+		\saveTG{韲}{00101}
+	\end{Verbatim}
+	\end{adjustwidth}
+\endgroup
+
+\end{document}
